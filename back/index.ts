@@ -12,10 +12,30 @@ const io = new Server(httpServer, {
   },
 });
 
-console.log('hola');
+interface user {
+  id: number;
+  name: string;
+  lastName: string;
+}
 
-io.on('connection', () => {
-  console.log('hola!');
+const user1: user = {
+  id: 1,
+  name: 'Tomas',
+  lastName: 'Birbe',
+};
+
+io.on('connection', (socket) => {
+  socket.on('message', (message) => {
+    const { msg } = message;
+    socket.emit('messageIn', {
+      idChat: 1,
+      newMsg: {
+        user: user1,
+        content: msg,
+        timestamp: new Date().getTime(),
+      },
+    });
+  });
 });
 
 httpServer.listen(3001);
