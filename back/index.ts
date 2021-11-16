@@ -1,41 +1,18 @@
-import express from 'express';
-import { Server } from 'socket.io';
-import { createServer } from 'http';
+import { createServer, mountServer } from './server';
+import connectToDB from './src/db/connect';
+import dotenv from 'dotenv';
 
-const app = express();
-const httpServer = createServer(app);
+// Routers
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: '*',
-    methods: '*',
-  },
-});
+import authRouter from './src/Routes/auth.routes';
+import userRouter from './src/Routes/user.routes';
 
-interface user {
-  id: number;
-  name: string;
-  lastName: string;
-}
+// Make .env file available on every ts file
+dotenv.config();
 
-const user1: user = {
-  id: 1,
-  name: 'Tomas',
-  lastName: 'Birbe',
-};
+const { app, httpServer, io } = createServer();
 
-io.on('connection', (socket) => {
-  socket.on('message', (message) => {
-    const { msg } = message;
-    socket.emit('messageIn', {
-      idChat: 1,
-      newMsg: {
-        user: user1,
-        content: msg,
-        timestamp: new Date().getTime(),
-      },
-    });
-  });
-});
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
 
-httpServer.listen(3001);
+mountServer(httpServer);
