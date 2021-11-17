@@ -2,7 +2,7 @@ import express from 'express';
 
 // Controllers
 
-import { login } from '../Controllers/Auth.controller';
+import { login, register } from '../Controllers/Auth.controller';
 
 const authRouter = express.Router();
 
@@ -12,8 +12,6 @@ authRouter.get('/', () => {
 
 authRouter.post('/login', login);
 
-authRouter.get('/register', () => {
-  console.log('Auth router/Register');
-});
+authRouter.post('/register', register);
 
 export default authRouter;
