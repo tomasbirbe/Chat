@@ -5,6 +5,9 @@ interface auth {
   isLogged: boolean;
 }
 
-const authContext = React.createContext<auth | null>(null);
+const authContext = React.createContext<auth>({
+  token: '',
+  isLogged: false,
+});
 
 export default authContext;

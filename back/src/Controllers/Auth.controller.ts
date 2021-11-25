@@ -13,11 +13,11 @@ const login = (req: express.Request, res: express.Response) => {
         });
         res.json({ token });
       } else {
-        res.json({ msg: 'Invalid password' });
+        res.status(400).json({ msg: 'Invalid password' });
       }
     })
     .catch((e) => {
-      res.json({ msg: 'Invalid email address' });
+      res.status(400).json({ msg: 'Invalid email address' });
     });
 };
 
