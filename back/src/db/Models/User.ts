@@ -2,10 +2,11 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    name: String,
-    lastName: String,
+    name: { type: String, isRequired: true },
+    lastName: { type: String, isRequired: true },
     email: { type: String, unique: true },
-    password: String,
+    password: { type: String, isRequired: true },
+    chats: [{ type: Schema.Types.ObjectId, ref: 'chats' }],
   },
   {
     versionKey: false,

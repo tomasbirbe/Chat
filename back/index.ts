@@ -9,7 +9,7 @@ import userRouter from './src/Routes/user.routes';
 
 // Socket handlers
 
-import { sendMessage } from './src/Handlers/Message.Handler';
+import { sendChat, updateChat } from './src/Handlers/Message.Handler';
 
 // Make .env file available on every ts file
 dotenv.config();
@@ -20,7 +20,8 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 
 const onConnection = (socket) => {
-  socket.on('message:sendMessage', sendMessage);
+  socket.on('message:sendMessage', updateChat(socket));
+  socket.on('message:getChat', sendChat(socket));
 };
 
 io.on('connection', onConnection);
