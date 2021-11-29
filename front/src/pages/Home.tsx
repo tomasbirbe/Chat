@@ -1,21 +1,45 @@
-import React, { useContext, useEffect } from 'react';
-import { io } from 'socket.io-client';
+import React, { useContext, useEffect, useState } from 'react';
+import socket from '../Connections/socket';
 import authContext from '../../authContext';
 
-const Home = () => {
-  const socket = io('http://localhost:3001');
-  useEffect(() => {
-    socket.connect();
-  });
+interface user {
+  name: string;
+  lastname: string;
+  email: string;
+  _id: string;
+}
 
+interface message {
+  _id: string;
+  from: user;
+  to?: string;
+  data: string;
+  timestamp: number;
+}
+
+interface chat {
+  _id: string;
+  messages: message[];
+}
+
+const Home: React.FC = () => {
   const auth = useContext(authContext);
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    socket.emit('chats:updateAll', { token: auth.token });
+  }, []);
+
+  socket.on('updateChats:tomas.birbe@gmail.com', (chatsUpdated) => {
+    console.log('chats actualizados');
+    setChats(chatsUpdated);
+  });
 
   const sendMessage = (e: any) => {
     socket.emit('message:sendMessage', {
-      token: auth.token,
+      from: auth.token,
       to: e.target[0].value,
-      msg: e.target[1].value,
-      type: 'private',
+      data: e.target[1].value,
     });
   };
 
@@ -32,6 +56,23 @@ const Home = () => {
         </label>
         <button type="submit">Send message</button>
       </form>
+      <button onClick={() => console.log(chats)}>Show chats</button>
+      {chats.map((chat: chat) => {
+        return (
+          <ul key={chat._id}>
+            {chat.messages.map((message: message) => {
+              return (
+                <li key={message._id}>
+                  {`${message.from.name} - ${message.data}`}{' '}
+                  <small>
+                    {new Date(message.timestamp).toLocaleTimeString()}
+                  </small>{' '}
+                </li>
+              );
+            })}
+          </ul>
+        );
+      })}
     </div>
   );
 };

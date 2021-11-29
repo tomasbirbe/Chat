@@ -6,7 +6,7 @@ const userSchema = new Schema(
     lastName: { type: String, isRequired: true },
     email: { type: String, unique: true },
     password: { type: String, isRequired: true },
-    chats: [{ type: Schema.Types.ObjectId, ref: 'chats' }],
+    chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
   },
   {
     versionKey: false,

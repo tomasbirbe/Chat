@@ -1,9 +1,11 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, SchemaType } from 'mongoose';
 
 const messageSchema = new Schema(
   {
-    from: { type: String, isRequired: true },
-    to: { type: String, isRequired: true },
+    from: {
+      type: { name: String, lastName: String, email: String, _id: String },
+      isRequired: true,
+    },
     data: { type: String, isRequired: true },
     timestamp: { type: Number, isRequired: true },
   },

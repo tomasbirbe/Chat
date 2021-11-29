@@ -27,14 +27,14 @@ const Login: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} autoComplete="true">
       <label>
         Email
-        <input type="email" />
+        <input type="email" autoComplete="email" />
       </label>
       <label>
         Password
-        <input type="password" />
+        <input type="password" autoComplete="current-password" />
       </label>
       <button type="submit">Login</button>
     </form>
