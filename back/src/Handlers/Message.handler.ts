@@ -4,10 +4,11 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import User from '../db/Models/User';
 
 interface user {
+  _id: string;
   name: string;
   lastname: string;
   email: string;
-  _id: string;
+  chats: string[];
 }
 
 interface message {
@@ -25,13 +26,17 @@ const addMessage = (socket) => async (payload) => {
 
   let chat;
 
-  if (idChat) {
+  try {
     chat = await Chat.findById(idChat);
-  } else {
+  } catch {
     chat = await Chat.create({
       messages: [],
     });
-    // attach chat with the users
+    const user2 = await User.findOne({ email: to });
+    user.chats.push(chat._id);
+    user2.chats.push(chat._id);
+    user.save();
+    user2.save();
   }
   chat.messages.push({
     from: {
@@ -47,42 +52,6 @@ const addMessage = (socket) => async (payload) => {
   console.log(from);
   socket.emit(`updateChats:${user.email}`, user.chats);
   socket.emit(`updateChats:${to}`, user.chats);
-
-  // if (idChat) {
-  //   const chat = await Chat.findById(idChat);
-  //   chat.messages.push({
-  //     from: {
-  //       name: user.name,
-  //       lastName: user.lastName,
-  //       email: user.email,
-  //       _id: user._id,
-  //     },
-  //     data,
-  //     timestamp,
-  //   });
-  //   await chat.save();
-  //   console.log(from);
-  //   socket.emit(`updateChats:${from}`, user.chats);
-  //   socket.emit(`updateChats:${to}`, user.chats);
-  // } else {
-  //   const chat = await Chat.create({
-  //     messages: [],
-  //   });
-  //   chat.messages.push({
-  //     from: {
-  //       name: user.name,
-  //       lastName: user.lastName,
-  //       email: user.email,
-  //       _id: user._id,
-  //     },
-  //     data,
-  //     timestamp,
-  //   });
-  //   await chat.save();
-  //   console.log(from);
-  //   socket.emit(`updateChats:${from}`, user.chats);
-  //   socket.emit(`updateChats:${to}`, user.chats);
-  // }
 };
 
 const sendChat = (socket) => (payload) => {
