@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import authContext from '../authContext';
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from '../theme';
 
 const auth = {
   token: '',
@@ -12,7 +14,9 @@ const auth = {
 ReactDOM.render(
   <authContext.Provider value={auth}>
     <Router>
-      <App />
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
     </Router>
   </authContext.Provider>,
   document.getElementById('root')
