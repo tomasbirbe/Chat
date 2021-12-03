@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import RequireAuth from './Auth/requireAuth';
 import NotFound from './pages/NotFound';
+import { Container } from '@chakra-ui/layout';
 
 const App = () => {
   const msg = {
@@ -32,22 +33,18 @@ const App = () => {
   socket.on(`sendChat:${1}`, (chat) => console.log(chat));
 
   return (
-    <>
-      <Routes>
-        <Route
-          path="/home"
-          element={
-            <RequireAuth>
-              <Home />
-            </RequireAuth>
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <button onClick={() => handleClick()}>Generar mensaje</button>
-      <button onClick={() => handleClick2()}>Get chats</button>
-    </>
+    <Routes>
+      <Route
+        path="/home"
+        element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        }
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
