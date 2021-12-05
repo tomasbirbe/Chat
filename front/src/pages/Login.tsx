@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import axios from 'axios';
 import authContext from '../../authContext';
 import { useNavigate } from 'react-router-dom';
-import { Container, Link, Stack, Text } from '@chakra-ui/layout';
+import { Box, Container, Link, Stack, Text } from '@chakra-ui/layout';
 import { Input } from '@chakra-ui/input';
 import { Button } from '@chakra-ui/button';
 
@@ -36,6 +36,10 @@ const Login: React.FC = () => {
       alignItems="center"
       maxWidth="xl%"
       height="100%"
+      bgPosition="center"
+      bgRepeat="no-repeat"
+      bgSize="cover"
+      bgImage="url('../../assets/wallpaper.jpg')"
     >
       <Stack
         as="form"
@@ -49,11 +53,17 @@ const Login: React.FC = () => {
         <Stack>
           <Stack as="label" width="300px" align="center">
             <Text>Email</Text>
-            <Input type="email" height="40px" autoComplete="email" />
+            <Input
+              type="email"
+              height="40px"
+              autoComplete="email"
+              variant="oneLine"
+            />
           </Stack>
           <Stack as="label" width="300px" align="center">
             <Text>Password</Text>
             <Input
+              variant="oneLine"
               type="password"
               height="40px"
               autoComplete="current-password"
