@@ -37,9 +37,9 @@ const App = () => {
       <Route
         path="/home"
         element={
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
+          // <RequireAuth>
+          <Home />
+          // </RequireAuth>
         }
       />
       <Route path="/login" element={<Login />} />

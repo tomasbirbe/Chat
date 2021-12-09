@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import socket from '../Connections/socket';
 import authContext from '../../authContext';
+import { Container, Stack, Grid, GridItem, Text } from '@chakra-ui/layout';
+import { Img } from '@chakra-ui/react';
 
 interface user {
   name: string;
@@ -23,57 +25,26 @@ interface chat {
 }
 
 const Home: React.FC = () => {
-  const auth = useContext(authContext);
-  const [chats, setChats] = useState([]);
-
-  useEffect(() => {
-    socket.emit('chats:updateAll', { token: auth.token });
-  }, []);
-
-  socket.on('updateChats:tomas.birbe@gmail.com', (chatsUpdated) => {
-    console.log('chats actualizados');
-    setChats(chatsUpdated);
-  });
-
-  const sendMessage = (e: any) => {
-    socket.emit('message:sendMessage', {
-      from: auth.token,
-      to: e.target[0].value,
-      data: e.target[1].value,
-    });
-  };
-
   return (
-    <div>
-      <form onSubmit={sendMessage}>
-        <label>
-          Email receptor
-          <input type="email" />
-        </label>
-        <label>
-          Mensaje
-          <textarea></textarea>
-        </label>
-        <button type="submit">Send message</button>
-      </form>
-      <button onClick={() => console.log(chats)}>Show chats</button>
-      {chats.map((chat: chat) => {
-        return (
-          <ul key={chat._id}>
-            {chat.messages.map((message: message) => {
-              return (
-                <li key={message._id}>
-                  {`${message.from.name} - ${message.data}`}{' '}
-                  <small>
-                    {new Date(message.timestamp).toLocaleTimeString()}
-                  </small>{' '}
-                </li>
-              );
-            })}
-          </ul>
-        );
-      })}
-    </div>
+    <Container as="main" maxWidth="full" height="full" p={0}>
+      <Stack spacing={0} width="full">
+        <Stack spacing={0} direction="row" width="full">
+          <Img
+            borderRadius="full"
+            width="60px"
+            height="60px"
+            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.paragatitos.com%2Fwp-content%2Fuploads%2Fgatito-jugando-3.jpg&f=1&nofb=1"
+          />
+          <Stack width="full">
+            <Stack spacing={0} direction="row" justify="space-between">
+              <Text>Tomas</Text>
+              <Text>10:33 p.m.</Text>
+            </Stack>
+            <Text>Hola!</Text>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Container>
   );
 };
 
