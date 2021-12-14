@@ -7,7 +7,6 @@ const requireAuth: any = ({ children }: { children: any }) => {
   if (!auth?.isLogged) {
     return <Navigate to="/login" />;
   }
-
   return children;
 };
 

@@ -3,47 +3,32 @@ import socket from '../Connections/socket';
 import authContext from '../../authContext';
 import { Container, Stack, Grid, GridItem, Text } from '@chakra-ui/layout';
 import { Img } from '@chakra-ui/react';
+import Chat from './components/Chat';
+import { chat, contact, user } from '../Types/types';
+import { Navigate } from 'react-router-dom';
 
-interface user {
-  name: string;
-  lastname: string;
-  email: string;
-  _id: string;
-}
+const Home: React.FC = ({ chatState, contactListState }: any) => {
+  const [chat, setChat] = chatState;
+  const [contactList, setContactList] = contactListState;
 
-interface message {
-  _id: string;
-  from: user;
-  to?: string;
-  data: string;
-  timestamp: number;
-}
+  const searchContact = (chat: chat): contact | undefined => {
+    const userToFind: user | undefined = chat.participants.find(
+      (user) => user._id !== '1'
+    );
+    const contact = contactList.find(
+      (contact) => contact.idContact === userToFind?._id
+    );
+    return contact;
+  };
 
-interface chat {
-  _id: string;
-  messages: message[];
-}
-
-const Home: React.FC = () => {
   return (
     <Container as="main" maxWidth="full" height="full" p={0}>
-      <Stack spacing={0} width="full">
-        <Stack spacing={0} direction="row" width="full">
-          <Img
-            borderRadius="full"
-            width="60px"
-            height="60px"
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.paragatitos.com%2Fwp-content%2Fuploads%2Fgatito-jugando-3.jpg&f=1&nofb=1"
-          />
-          <Stack width="full">
-            <Stack spacing={0} direction="row" justify="space-between">
-              <Text>Tomas</Text>
-              <Text>10:33 p.m.</Text>
-            </Stack>
-            <Text>Hola!</Text>
-          </Stack>
-        </Stack>
+      <Stack as="header" bg="green.500">
+        Header
       </Stack>
+      {chats.map((chat) => (
+        <Chat key={chat._id} chat={chat} contact={searchContact(chat)} />
+      ))}
     </Container>
   );
 };

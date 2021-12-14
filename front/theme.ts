@@ -55,13 +55,13 @@ const theme = extendTheme({
         height: '100%',
       },
       ':-webkit-autofill': {
-        '-webkit-box-shadow': '0 0 0 30px #DAF0E4 inset ;',
+        webkitBoxShadow: '0 0 0 30px #DAF0E4 inset',
       },
       ':-webkit-autofill:focus': {
-        '-webkit-box-shadow': '0 0 0 30px #DAF0E4 inset ;',
+        webkitBoxShadow: '0 0 0 30px #DAF0E4 inset',
       },
       ':-webkit-autofill:active': {
-        '-webkit-box-shadow': '0 0 0 30px #DAF0E4 inset ;',
+        webkitBoxShadow: '0 0 0 30px #DAF0E4 inset',
       },
     },
   },
