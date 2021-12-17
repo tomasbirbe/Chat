@@ -1,24 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
-import socket from '../Connections/socket';
-import authContext from '../../authContext';
-import { Container, Stack, Grid, GridItem, Text } from '@chakra-ui/layout';
-import { Img } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Container, Stack } from '@chakra-ui/layout';
 import Chat from './components/Chat';
 import { chat, contact, user } from '../Types/types';
-import { Navigate } from 'react-router-dom';
 
-const Home: React.FC = ({ chatState, contactListState }: any) => {
-  const [chat, setChat] = chatState;
+const Home = ({
+  chatState,
+  contactListState,
+  chatSelectedState,
+}: {
+  chatState: [chat[], React.Dispatch<React.SetStateAction<chat[]>>];
+  contactListState: [
+    contact[],
+    React.Dispatch<React.SetStateAction<contact[]>>
+  ];
+  chatSelectedState: [chat, React.Dispatch<React.SetStateAction<chat>>];
+}) => {
+  const [chats, setChats] = chatState;
   const [contactList, setContactList] = contactListState;
+  const [chatSelected, setChatSelected] = chatSelectedState;
 
   const searchContact = (chat: chat): contact | undefined => {
     const userToFind: user | undefined = chat.participants.find(
       (user) => user._id !== '1'
     );
     const contact = contactList.find(
-      (contact) => contact.idContact === userToFind?._id
+      (contact: contact) => contact.idContact === userToFind?._id
     );
     return contact;
+  };
+
+  const openChat = (chat: chat) => {
+    setChatSelected(chat);
+    console.log(chat._id);
   };
 
   return (
@@ -26,9 +39,22 @@ const Home: React.FC = ({ chatState, contactListState }: any) => {
       <Stack as="header" bg="green.500">
         Header
       </Stack>
-      {chats.map((chat) => (
-        <Chat key={chat._id} chat={chat} contact={searchContact(chat)} />
-      ))}
+      <Box as="section">
+        {chats.map((chat: chat) => (
+          <Box
+            key={chat._id}
+            as="article"
+            onClick={() => openChat(chat)}
+            sx={{
+              userSelect: 'none',
+            }}
+            _hover={{ bg: 'gray.100', cursor: 'pointer' }}
+            _active={{ bg: 'gray.200' }}
+          >
+            <Chat chat={chat} contact={searchContact(chat)} />
+          </Box>
+        ))}
+      </Box>
     </Container>
   );
 };

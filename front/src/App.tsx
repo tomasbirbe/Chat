@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import RequireAuth from './Auth/requireAuth';
 import NotFound from './pages/NotFound';
 import { Container } from '@chakra-ui/layout';
+import ChatPage from './pages/ChatPage';
+import { chat } from './Types/types';
 
 const chatMock = {
   _id: '125',
@@ -66,6 +68,8 @@ const App = () => {
   ]);
   const [contactList, setContactList] = useState([contactMock]);
 
+  const [chatSelected, setChatSelected] = useState<chat>();
+
   return (
     <Routes>
       <Route
@@ -73,14 +77,15 @@ const App = () => {
         element={
           // <RequireAuth>
           <Home
-            chatState={[chats, setChats]}
             contactListState={[contactList, setContactList]}
+            chatState={[chats, setChats]}
+            chatSelectedState={[chatSelected, setChatSelected]}
           />
           // </RequireAuth>
         }
       />
       <Route path="/login" element={<Login />} />
-      <Route path="/chat/:id" element={<ChatPage />} />
+      <Route path="/chat/:id" element={<ChatPage chat={chatSelected} />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
