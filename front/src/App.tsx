@@ -38,13 +38,57 @@ const chatMock = {
     {
       _id: '15',
       from: {
-        _id: '2',
+        _id: '1',
+        name: 'Tomas',
+        lastName: 'Birbe',
+        email: 'tomas.birbe@gmail.com',
+      },
+      timestamp: new Date().getTime() * Math.random() * 10,
+      data: 'asdfasdf!',
+    },
+    {
+      _id: '15',
+      from: {
+        _id: '1',
+        name: 'Tomas',
+        lastName: 'Birbe',
+        email: 'tomas.birbe@gmail.com',
+      },
+      timestamp: new Date().getTime() * Math.random() * 10,
+      data: 'Como estas?',
+    },
+    {
+      _id: '15',
+      from: {
+        _id: '3',
         name: 'Caterina',
         lastName: 'Banda',
         email: 'asdfe@gmail.com',
       },
       timestamp: new Date().getTime() * Math.random() * 10,
-      data: 'Hola, como estas?',
+      data: 'Bien, y vos?',
+    },
+    {
+      _id: '15',
+      from: {
+        _id: '3',
+        name: 'Caterina',
+        lastName: 'Banda',
+        email: 'asdfe@gmail.com',
+      },
+      timestamp: new Date().getTime() * Math.random() * 10,
+      data: 'Bien, y vos?',
+    },
+    {
+      _id: '15',
+      from: {
+        _id: '1',
+        name: 'Tomas',
+        lastName: 'Birbe',
+        email: 'tomas.birbe@gmail.com',
+      },
+      timestamp: new Date().getTime() * Math.random() * 10,
+      data: 'asdfasdf!',
     },
   ],
 };
@@ -68,7 +112,7 @@ const App = () => {
   ]);
   const [contactList, setContactList] = useState([contactMock]);
 
-  const [chatSelected, setChatSelected] = useState<chat>();
+  const [chatSelected, setChatSelected] = useState<chat | null>(null);
 
   return (
     <Routes>
@@ -77,15 +121,15 @@ const App = () => {
         element={
           // <RequireAuth>
           <Home
-            contactListState={[contactList, setContactList]}
-            chatState={[chats, setChats]}
-            chatSelectedState={[chatSelected, setChatSelected]}
+            contactListState={{ contactList }}
+            chatState={{ chats }}
+            chatSelectedState={{ setChatSelected }}
           />
           // </RequireAuth>
         }
       />
       <Route path="/login" element={<Login />} />
-      <Route path="/chat/:id" element={<ChatPage chat={chatSelected} />} />
+      <Route path="/chat" element={<ChatPage chat={chatSelected} />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

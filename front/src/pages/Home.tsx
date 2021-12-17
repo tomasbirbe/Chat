@@ -2,22 +2,27 @@ import React from 'react';
 import { Box, Container, Stack } from '@chakra-ui/layout';
 import Chat from './components/Chat';
 import { chat, contact, user } from '../Types/types';
+import { useNavigate } from 'react-router-dom';
 
 const Home = ({
   chatState,
   contactListState,
   chatSelectedState,
 }: {
-  chatState: [chat[], React.Dispatch<React.SetStateAction<chat[]>>];
-  contactListState: [
-    contact[],
-    React.Dispatch<React.SetStateAction<contact[]>>
-  ];
-  chatSelectedState: [chat, React.Dispatch<React.SetStateAction<chat>>];
+  chatState: {
+    chats: chat[];
+  };
+  contactListState: {
+    contactList: contact[];
+  };
+  chatSelectedState: {
+    setChatSelected: React.Dispatch<React.SetStateAction<chat | null>>;
+  };
 }) => {
-  const [chats, setChats] = chatState;
-  const [contactList, setContactList] = contactListState;
-  const [chatSelected, setChatSelected] = chatSelectedState;
+  const { chats } = chatState;
+  const { contactList } = contactListState;
+  const { setChatSelected } = chatSelectedState;
+  const navigate = useNavigate();
 
   const searchContact = (chat: chat): contact | undefined => {
     const userToFind: user | undefined = chat.participants.find(
@@ -31,7 +36,7 @@ const Home = ({
 
   const openChat = (chat: chat) => {
     setChatSelected(chat);
-    console.log(chat._id);
+    navigate(`../chat`);
   };
 
   return (
