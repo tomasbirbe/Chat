@@ -4,10 +4,13 @@ import Chat from './components/Chat';
 import { chat, contact, user } from '../Types/types';
 import { useNavigate } from 'react-router-dom';
 
+const myId = '1';
+
 const Home = ({
   chatState,
   contactListState,
   chatSelectedState,
+  contactState,
 }: {
   chatState: {
     chats: chat[];
@@ -18,15 +21,19 @@ const Home = ({
   chatSelectedState: {
     setChatSelected: React.Dispatch<React.SetStateAction<chat | null>>;
   };
+  contactState: {
+    setContact: React.Dispatch<React.SetStateAction<contact | undefined>>;
+  };
 }) => {
   const { chats } = chatState;
   const { contactList } = contactListState;
   const { setChatSelected } = chatSelectedState;
+  const { setContact } = contactState;
   const navigate = useNavigate();
 
-  const searchContact = (chat: chat): contact | undefined => {
-    const userToFind: user | undefined = chat.participants.find(
-      (user) => user._id !== '1'
+  const searchContact = (chat: chat | null): contact | undefined => {
+    const userToFind: user | undefined = chat?.participants.find(
+      (user) => user._id !== myId
     );
     const contact = contactList.find(
       (contact: contact) => contact.idContact === userToFind?._id
@@ -36,6 +43,7 @@ const Home = ({
 
   const openChat = (chat: chat) => {
     setChatSelected(chat);
+    setContact(searchContact(chat));
     navigate(`../chat`);
   };
 
