@@ -16,10 +16,9 @@ const ChatPage = ({ chat }: { chat: chat | null }) => {
   };
 
   return (
-    <Stack as="ul" spacing={0}>
+    <Stack as="ul" spacing={2} paddingBlockStart={3}>
       {chat?.messages.map((message, index) => {
         return (
-          // Ver por que al aplicar margin en el primer stack solo aplica en el primer elemento
           <Stack
             as="li"
             key={message._id}
@@ -28,8 +27,23 @@ const ChatPage = ({ chat }: { chat: chat | null }) => {
           >
             <Stack
               width="fit-content"
+              bg="red"
+              borderRadius={7}
+              paddingInline={4}
+              paddingBlock={1}
               alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
-              marginBlockStart={lastFrom(index) || index === 0 ? 0 : 8}
+              marginBlockStart={lastFrom(index) || index === 0 ? -1 : 4}
+              spacing={0}
+              sx={{
+                '&::after': {
+                  content: `hola`,
+                  position: 'float',
+                  top: '-25px',
+                  width: '20px',
+                  height: '20px',
+                  background: 'green',
+                },
+              }}
             >
               {lastFrom(index) ? (
                 ''
