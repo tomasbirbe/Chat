@@ -6,66 +6,34 @@ import Message from './components/Message';
 const myId = '1';
 
 const ChatPage = ({ chat }: { chat: chat | null }) => {
-  const lastFrom = (index: number) => {
-    if (index === 0) {
-      return false;
+  const prevMessageItsMine = (index: number) => {
+    const prevMessageOwner = chat?.messages[index - 1]?.from._id;
+    const messageOwner = chat?.messages[index].from._id;
+    if (prevMessageOwner === messageOwner || index === 0) {
+      return true;
     }
-    return (
-      chat?.messages[index - 1]?.from._id === chat?.messages[index].from._id
-    );
+    return false;
   };
 
   return (
-    <Stack as="ul" spacing={2} paddingBlockStart={3}>
+    <Box
+      as="ul"
+      display="flex"
+      flexDirection="column"
+      paddingBlockStart={3}
+      paddingInline={4}
+    >
       {chat?.messages.map((message, index) => {
         return (
-          <Stack
-            as="li"
+          <Message
             key={message._id}
-            alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
-            spacing={0}
-          >
-            <Stack
-              width="fit-content"
-              bg="red"
-              borderRadius={7}
-              paddingInline={4}
-              paddingBlock={1}
-              alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
-              marginBlockStart={lastFrom(index) || index === 0 ? -1 : 4}
-              spacing={0}
-              sx={{
-                '&::after': {
-                  content: `hola`,
-                  position: 'float',
-                  top: '-25px',
-                  width: '20px',
-                  height: '20px',
-                  background: 'green',
-                },
-              }}
-            >
-              {lastFrom(index) ? (
-                ''
-              ) : (
-                <Stack>
-                  <Text>{message.from.name}</Text>
-                </Stack>
-              )}
-
-              <Stack
-                direction="row"
-                justify="space-between"
-                width="fit-content"
-              >
-                <Text>{message.data}</Text>
-                <Text>{new Date(message.timestamp).toLocaleTimeString()}</Text>
-              </Stack>
-            </Stack>
-          </Stack>
+            message={message}
+            firstMessage={index === 0 ? true : false}
+            prevMessageItsMine={prevMessageItsMine(index)}
+          />
         );
       })}
-    </Stack>
+    </Box>
   );
 };
 
