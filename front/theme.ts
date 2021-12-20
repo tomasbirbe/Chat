@@ -1,25 +1,22 @@
 import { extendTheme } from '@chakra-ui/react';
 
-const primary = '#128C7E';
-const primaryDarker = '#0D645A';
-const primaryDarkest = '#06322D';
-
 const theme = extendTheme({
   colors: {
-    primary,
+    'pale.green': '#DCF8C6',
+    'light.green': '#25D366',
+    'teal.green': '#128C7E',
+    'teal.green.dark': '#0D645A',
+    'secondary.gray': '#f0f0f0',
+    'background.500': '#ECE5DD',
   },
   components: {
     Button: {
       baseStyle: {
-        _hover: {
-          backgroundColor: primaryDarker,
-        },
+        _hover: {},
         _focus: {
           boxShadow: 'none',
         },
-        _active: {
-          backgroundColor: primaryDarkest,
-        },
+        _active: {},
       },
       defaultProps: {
         variant: null,
@@ -28,14 +25,15 @@ const theme = extendTheme({
     Input: {
       baseStyle: {
         field: {
-          background: 'red',
+          background: 'white',
         },
       },
       size: {},
       variants: {
         oneLine: {
           field: {
-            borderBottom: `1px solid ${primary}`,
+            borderBottom: `1px solid`,
+            borderColor: 'primary.500',
             background: 'transparent',
             borderRadius: '0px',
           },

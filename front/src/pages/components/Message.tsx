@@ -26,13 +26,13 @@ const Message = ({
             ? {
                 content: '""',
                 position: 'absolute',
-                borderTop: '30px solid lightgray',
+                borderTop: '30px solid',
+                borderColor: myId === message.from._id ? 'pale.green' : 'white',
                 borderRight:
                   myId === message.from._id ? '15px solid transparent' : '',
                 borderLeft:
                   myId !== message.from._id ? '15px solid transparent' : '',
                 width: '0',
-                zIndex: '-1',
                 top: 0,
                 left: myId === message.from._id ? '' : '-8px',
                 right: myId === message.from._id ? '-8px' : '',
@@ -44,18 +44,25 @@ const Message = ({
     >
       <Stack
         width="fit-content"
-        bg="gray.300"
         borderRadius={7}
-        paddingInline={4}
-        paddingBlock={2}
+        paddingInline={2}
+        paddingBlock={1.5}
+        bg={myId === message.from._id ? 'pale.green' : 'white'}
         alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
-        spacing={0}
+        spacing={3}
         position="static"
+        direction="row"
+        height="35px"
       >
-        <Stack direction="row" justify="space-between" width="fit-content">
-          <Text>{message.data}</Text>
-          <Text>{new Date(message.timestamp).toLocaleTimeString()}</Text>
-        </Stack>
+        <Text alignSelf="flex-start" fontSize={14}>
+          {message.data}
+        </Text>
+
+        <Text alignSelf="flex-end" fontSize={11}>
+          {`${new Date(message.timestamp).getHours()}:${new Date(
+            message.timestamp
+          ).getMinutes()}`}
+        </Text>
       </Stack>
     </Stack>
   );

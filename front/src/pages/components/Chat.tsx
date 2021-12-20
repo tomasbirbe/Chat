@@ -39,7 +39,7 @@ const Chat = ({
           <Text fontWeight="100" fontSize={12}>
             {' '}
             {new Date(
-              chat.messages[chat.messages.length - 1].timestamp
+              chat.messages[chat?.messages.length - 1].timestamp
             ).toLocaleDateString()}{' '}
           </Text>
         </Stack>

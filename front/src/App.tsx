@@ -132,7 +132,12 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route
         path="/chat"
-        element={<ChatPage chat={chatSelected} contact={contact} />}
+        element={
+          <ChatPage
+            chatState={{ chatSelected, setChatSelected }}
+            contactState={{ contact }}
+          />
+        }
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
