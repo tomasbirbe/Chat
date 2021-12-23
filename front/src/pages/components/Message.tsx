@@ -6,19 +6,23 @@ const myId = '1';
 
 const Message = ({
   message,
-  prevMessageItsMine,
-  firstMessage,
+  marginBlockStart,
+  alignSelf,
+  children,
+  ...props
 }: {
   message: message;
-  prevMessageItsMine: boolean;
-  firstMessage: boolean;
+  marginBlockStart: number;
+  alignSelf: string;
+  children: any;
 }) => {
+  console.log(children);
   return (
     <Stack
       as="li"
-      alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
+      alignSelf={alignSelf}
       spacing={0}
-      marginBlockStart={prevMessageItsMine || firstMessage ? 1 : 5}
+      marginBlockStart={marginBlockStart}
       position="relative"
     >
       {/* Message Tail */}
