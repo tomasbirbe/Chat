@@ -6,39 +6,41 @@ const myId = '1';
 
 const Message = ({
   message,
-  marginBlockStart,
-  alignSelf,
-  children,
-  ...props
+  firstMessage,
+  prevMessageItsMine,
 }: {
   message: message;
-  marginBlockStart: number;
-  alignSelf: string;
-  children: any;
+  firstMessage: boolean;
+  prevMessageItsMine: boolean;
 }) => {
-  console.log(children);
   return (
     <Stack
       as="li"
-      alignSelf={alignSelf}
+      alignSelf={myId === message.from._id ? 'flex-end' : 'flex-start'}
       spacing={0}
-      marginBlockStart={marginBlockStart}
+      marginBlockStart={prevMessageItsMine ? 1 : 5}
       position="relative"
     >
       {/* Message Tail */}
-      <Box
-        position="absolute"
-        borderTop="30px solid"
-        borderColor={myId == message.from._id ? 'pale.green' : 'white'}
-        borderRight={myId === message.from._id ? '15px solid transparent' : ''}
-        borderLeft={myId !== message.from._id ? '15px solid transparent' : ''}
-        width="0"
-        top={0}
-        left={myId == message.from._id ? '' : '-8px'}
-        right={myId == message.from._id ? '-8px' : ''}
-        height="0"
-        background="transparent"
-      />
+      {!prevMessageItsMine || firstMessage ? (
+        <Box
+          position="absolute"
+          borderTop="30px solid"
+          borderColor={myId == message.from._id ? 'pale.green' : 'white'}
+          borderRight={
+            myId === message.from._id ? '15px solid transparent' : ''
+          }
+          borderLeft={myId !== message.from._id ? '15px solid transparent' : ''}
+          width="0"
+          top={0}
+          left={myId == message.from._id ? '' : '-8px'}
+          right={myId == message.from._id ? '-8px' : ''}
+          height="0"
+          background="transparent"
+        />
+      ) : (
+        ''
+      )}
 
       {/* Message Body */}
       <Stack
@@ -47,7 +49,7 @@ const Message = ({
         paddingInline={2}
         paddingBlock={1.5}
         bg={myId === message.from._id ? 'pale.green' : 'white'}
-        alignItems={myId === message.from._id ? 'flex-end' : 'flex-start'}
+        alignSelf={myId === message.from._id ? 'flex-end' : 'flex-start'}
         spacing={3}
         position="static"
         direction="row"

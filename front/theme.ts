@@ -26,6 +26,9 @@ const theme = extendTheme({
       baseStyle: {
         field: {
           background: 'white',
+          _focus: {},
+          _hover: {},
+          _active: {},
         },
       },
       size: {},

@@ -3,8 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { chat, contact, message } from '../Types/types';
 import Message from './components/Message';
 import { IoArrowBackSharp, IoSendSharp } from 'react-icons/io5';
-import MessageTail from './components/MessageTail';
-import MessageBody from './components/MessageBody';
 
 const myId = '1';
 
@@ -105,28 +103,9 @@ const ChatPage = ({
             <Message
               key={message._id}
               message={message}
-              alignSelf={message.from._id === myId ? 'flex-end' : 'flex-start'}
-              marginBlockStart={prevMessageItsMine(index) ? 1 : 5}
-            >
-              <MessageTail
-                onLeftSide={message.from._id !== myId}
-                onRightSide={message.from._id === myId}
-                primaryColor="pale.green"
-                secondaryColor="white"
-              />
-              <MessageBody
-                bg={myId === message.from._id ? 'pale.green' : 'white'}
-              >
-                <Text alignSelf="flex-start" fontSize={14}>
-                  {message.data}
-                </Text>
-                <Text alignSelf="flex-end" fontSize={11}>
-                  {`${new Date(message.timestamp).getHours()}:${new Date(
-                    message.timestamp
-                  ).getMinutes()}`}
-                </Text>
-              </MessageBody>
-            </Message>
+              firstMessage={index === 0 ? true : false}
+              prevMessageItsMine={prevMessageItsMine(index)}
+            />
           );
         })}
       </Box>
@@ -152,9 +131,6 @@ const ChatPage = ({
           height="50px"
           padding={0}
           borderRadius="full"
-          _focus={{}}
-          _hover={{}}
-          _active={{}}
         >
           <Icon as={IoSendSharp} color="gray.500" boxSize={6} />
         </Button>
