@@ -11,7 +11,7 @@ const login = (req: express.Request, res: express.Response) => {
         const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
           expiresIn: 1800,
         });
-        res.json({ token });
+        res.json({ token, expiresIn: 1800 });
       } else {
         res.status(400).json({ msg: 'Invalid password' });
       }

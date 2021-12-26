@@ -14,13 +14,21 @@ const messageSchema = new Schema(
   }
 );
 
+const userSchema = new Schema(
+  {
+    name: String,
+    lastName: String,
+    email: String,
+  },
+  { versionKey: false }
+);
+
 const chatSchema = new Schema(
   {
+    members: { type: [userSchema] },
     messages: { type: [messageSchema], isRequired: true },
   },
-  {
-    versionKey: false,
-  }
+  { versionKey: false }
 );
 
 const Chat = model('Chat', chatSchema);
