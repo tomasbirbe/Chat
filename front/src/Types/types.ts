@@ -20,8 +20,8 @@ interface chat {
 }
 
 interface contact {
-  _id: string;
-  idContact: string;
+  _id?: string;
+  idContact?: string;
   alias: string;
   email: string;
 }

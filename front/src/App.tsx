@@ -109,6 +109,10 @@ const App = () => {
     chatMock,
     chatMock,
     chatMock,
+    chatMock,
+    chatMock,
+    chatMock,
+    chatMock,
   ]);
   const [contactList, setContactList] = useState([contactMock]);
   const [contact, setContact] = useState<contact | undefined>(undefined);
@@ -121,7 +125,7 @@ const App = () => {
         element={
           // <RequireAuth>
           <Home
-            contactListState={{ contactList }}
+            contactListState={{ contactList, setContactList }}
             chatState={{ chats }}
             chatSelectedState={{ setChatSelected }}
             contactState={{ setContact }}

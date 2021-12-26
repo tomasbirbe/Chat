@@ -112,7 +112,7 @@ const ChatPage = ({ chatState, contactState }: params) => {
         paddingInline={4}
         bg="background.500"
         height="full"
-        overflowY="scroll"
+        overflowY="auto"
       >
         {chat?.messages.map((message, index) => {
           return (
@@ -141,7 +141,12 @@ const ChatPage = ({ chatState, contactState }: params) => {
         onSubmit={(e) => handleSubmit(e)}
         flexShrink={0}
       >
-        <Input placeholder="Write here!" borderRadius="full" name="message" />
+        <Input
+          placeholder="Write here!"
+          borderRadius="full"
+          name="message"
+          autoComplete="off"
+        />
         <Button
           type="submit"
           width="50px"
