@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import socket from './Connections/socket';
 import { Routes, Route } from 'react-router-dom';
 
@@ -93,44 +93,31 @@ const chatMock = {
   ],
 };
 
-const contactMock = {
-  _id: '1',
-  idContact: '2',
-  alias: 'Caterina',
+const contactMock: contact = {
+  _id: '2',
+  name: 'Caterina',
+  lastName: 'Banda',
   email: 'asdfe@gmail.com',
 };
 
 const App = () => {
-  const [chats, setChats] = useState<chat[]>([
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-    chatMock,
-  ]);
+  const [chats, setChats] = useState<chat[]>([]);
   const [contactList, setContactList] = useState([contactMock]);
   const [contact, setContact] = useState<contact | undefined>(undefined);
   const [chatSelected, setChatSelected] = useState<chat | null>(null);
-
   return (
     <Routes>
       <Route
         path="/home"
         element={
-          // <RequireAuth>
-          <Home
-            contactListState={{ contactList, setContactList }}
-            chatState={{ chats }}
-            chatSelectedState={{ setChatSelected }}
-            contactState={{ setContact }}
-          />
-          // </RequireAuth>
+          <RequireAuth>
+            <Home
+              contactListState={{ contactList, setContactList }}
+              chatState={{ chats, setChats }}
+              chatSelectedState={{ setChatSelected }}
+              contactState={{ contact, setContact }}
+            />
+          </RequireAuth>
         }
       />
       <Route path="/login" element={<Login />} />
@@ -138,7 +125,8 @@ const App = () => {
         path="/chat"
         element={
           <ChatPage
-            chatState={{ chatSelected, setChatSelected }}
+            chatsState={{ chats, setChats }}
+            chatSelectedState={{ chatSelected, setChatSelected }}
             contactState={{ contact }}
           />
         }

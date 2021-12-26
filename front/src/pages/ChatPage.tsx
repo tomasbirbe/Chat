@@ -8,7 +8,11 @@ import { useNavigate } from 'react-router-dom';
 const myId = '1';
 
 interface params {
-  chatState: {
+  chatsState: {
+    chats: chat[];
+    setChats: React.Dispatch<React.SetStateAction<chat[]>>;
+  };
+  chatSelectedState: {
     chatSelected: chat | null;
     setChatSelected: React.Dispatch<React.SetStateAction<chat | null>>;
   };
@@ -18,15 +22,16 @@ interface params {
   };
 }
 
-const ChatPage = ({ chatState, contactState }: params) => {
-  const { chatSelected: chat, setChatSelected: setChat } = chatState;
+const ChatPage = ({ chatsState, chatSelectedState, contactState }: params) => {
+  const { chats, setChats } = chatsState;
+  const { chatSelected, setChatSelected } = chatSelectedState;
   const { contact } = contactState;
   const navigate = useNavigate();
   const chatRef = useRef<any>();
 
   const prevMessageItsMine = (index: number) => {
-    const prevMessageOwner = chat?.messages[index - 1]?.from._id;
-    const messageOwner = chat?.messages[index].from._id;
+    const prevMessageOwner = chatSelected?.messages[index - 1]?.from._id;
+    const messageOwner = chatSelected?.messages[index].from._id;
     if (prevMessageOwner === messageOwner || index === 0) {
       return true;
     }
@@ -46,22 +51,44 @@ const ChatPage = ({ chatState, contactState }: params) => {
       data: e.target.message.value,
       timestamp: new Date().getTime(),
     };
-    const updatedMessages: message[] | undefined =
-      chat?.messages.concat(message);
-    const updatedChat = Object.assign({}, chat, { messages: updatedMessages });
-    setChat(updatedChat);
-    e.target.message.value = '';
+
+    const members = [contact];
+
+    // const updatedMessages: message[] | undefined =
+    //   chatSelected?.messages.concat([message]);
+
+    // const chat: chat | undefined = chats.find(
+    //   (chat) => chat._id === chatSelected?._id
+    // );
+    // const updatedChat = Object.assign({}, chatSelected, {
+    //   messages: updatedMessages,
+    // });
+    // if (chat && updatedMessages) {
+    //   chat.messages = updatedMessages;
+    // }
+    // setChatSelected(updatedChat);
+    // console.log(chat);
+    // e.target.message.value = '';
   };
 
   const backToHome = () => {
-    console.log('hola');
+    console.log(contact);
     navigate('../home');
   };
 
   useEffect(() => {
     chatRef.current.scrollTop =
       chatRef.current.scrollHeight - chatRef.current.clientHeight;
-  }, [chat]);
+  }, [chatSelected]);
+
+  useEffect(() => {
+    if (
+      !chats.find((chat: chat) => chat._id === chatSelected?._id) &&
+      chatSelected
+    ) {
+      setChats(chats.concat([chatSelected]));
+    }
+  }, [chatSelected]);
 
   return (
     <Stack spacing={0} height="full">
@@ -88,7 +115,7 @@ const ChatPage = ({ chatState, contactState }: params) => {
             src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.paragatitos.com%2Fwp-content%2Fuploads%2Fgatito-jugando-3.jpg&f=1&nofb=1"
           />
           <Text fontWeight={500} color="white">
-            {contact?.alias}
+            {contact?.lastName + ' ' + contact?.name}
           </Text>
         </Stack>
         <Button
@@ -114,7 +141,7 @@ const ChatPage = ({ chatState, contactState }: params) => {
         height="full"
         overflowY="auto"
       >
-        {chat?.messages.map((message, index) => {
+        {chatSelected?.messages.map((message, index) => {
           return (
             <Message
               key={message._id}

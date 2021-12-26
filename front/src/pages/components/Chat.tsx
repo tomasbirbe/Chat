@@ -35,7 +35,9 @@ const Chat = ({
           align="center"
           paddingInlineEnd={3}
         >
-          <Text fontWeight="bold">{contact?.alias}</Text>
+          <Text fontWeight="bold">
+            {contact?.lastName + ' ' + contact?.name}
+          </Text>
           <Text fontWeight="100" fontSize={12}>
             {' '}
             {new Date(

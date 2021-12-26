@@ -15,14 +15,14 @@ interface message {
 
 interface chat {
   _id: string;
-  participants: user[];
+  members: user[];
   messages: message[];
 }
 
 interface contact {
-  _id?: string;
-  idContact?: string;
-  alias: string;
+  _id: string;
+  name: string;
+  lastName: string;
   email: string;
 }
 

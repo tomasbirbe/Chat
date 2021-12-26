@@ -3,13 +3,7 @@ import { Box, Container, Divider, Stack, Text } from '@chakra-ui/layout';
 import Chat from './components/Chat';
 import { chat, contact, user } from '../Types/types';
 import { useNavigate } from 'react-router-dom';
-import {
-  IoAddSharp,
-  IoArrowBackSharp,
-  IoChatbox,
-  IoPersonAdd,
-  IoPersonSharp,
-} from 'react-icons/io5';
+import { IoArrowBackSharp, IoPersonAdd, IoPersonSharp } from 'react-icons/io5';
 import {
   Button,
   FormLabel,
@@ -33,6 +27,7 @@ const myId = '1';
 interface params {
   chatState: {
     chats: chat[];
+    setChats: React.Dispatch<React.SetStateAction<chat[]>>;
   };
   contactListState: {
     contactList: contact[];
@@ -42,6 +37,7 @@ interface params {
     setChatSelected: React.Dispatch<React.SetStateAction<chat | null>>;
   };
   contactState: {
+    contact: contact | undefined;
     setContact: React.Dispatch<React.SetStateAction<contact | undefined>>;
   };
 }
@@ -52,18 +48,44 @@ const Home = ({
   chatSelectedState,
   contactState,
 }: params) => {
-  const { chats } = chatState;
+  const { chats, setChats } = chatState;
   const { contactList, setContactList } = contactListState;
   const [showForm, setShowForm] = useState<boolean>(false);
   const { setChatSelected } = chatSelectedState;
-  const { setContact } = contactState;
+  const { contact, setContact } = contactState;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+
+  const newChat = (contact: contact) => {
+    const chat: chat = {
+      _id: '50',
+      members: [
+        {
+          name: 'Tomas',
+          lastName: 'Birbe',
+          _id: '1',
+          email: 'tomas.birbe@gmail.com',
+        },
+        {
+          name: contact.name,
+          lastName: contact.lastName,
+          _id: '2',
+          email: contact.email,
+        },
+      ],
+      messages: [],
+    };
+    setChatSelected(chat);
+    setContact(contact);
+    navigate('../chat');
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const newContact: contact = {
-      alias: `${e.target.lastName.value} ${e.target.name.value}`,
+      _id: '3',
+      name: e.target.name.value,
+      lastName: e.target.lastName.value,
       email: e.target.email.value,
     };
     setContactList([...contactList, newContact]);
@@ -78,11 +100,11 @@ const Home = ({
   };
 
   const searchContact = (chat: chat | null): contact | undefined => {
-    const userToFind: user | undefined = chat?.participants.find(
+    const userToFind: user | undefined = chat?.members.find(
       (user) => user._id !== myId
     );
     const contact = contactList.find(
-      (contact: contact) => contact.idContact === userToFind?._id
+      (contact: contact) => contact._id === userToFind?._id
     );
     return contact;
   };
@@ -94,8 +116,8 @@ const Home = ({
   };
 
   useEffect(() => {
-    console.log(contactList);
-  }, [contactList]);
+    console.log(contact);
+  }, []);
 
   return (
     <>
@@ -139,18 +161,6 @@ const Home = ({
             </Box>
           ))}
         </Box>
-        <Button
-          padding={0}
-          bg="teal.green"
-          borderRadius="full"
-          position="fixed"
-          width="50px"
-          height="50px"
-          bottom="25px"
-          right="12px"
-        >
-          <Icon as={IoChatbox} boxSize={5} color="white" />
-        </Button>
       </Container>
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -218,32 +228,44 @@ const Home = ({
               // Contact list
               <Stack as="ul">
                 {contactList?.map((contact) => (
-                  <Button
+                  <Stack
                     key={contact._id}
-                    padding={0}
-                    width="full"
-                    _hover={{ bg: 'gray.50' }}
+                    direction="row"
+                    spacing={0}
+                    align="center"
                     height="60px"
                   >
-                    <Stack
-                      direction="row"
+                    <Button
+                      padding={0}
                       width="full"
-                      paddingInline={2}
-                      paddingBlock={4}
-                      align="center"
+                      _hover={{ bg: 'gray.50' }}
+                      onClick={() => newChat(contact)}
+                      height="full"
                     >
-                      <Img
-                        src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Download-Image.png"
-                        width="40px"
-                      />
-                      <Text marginInlineStart={1}>{contact.alias}</Text>
-                    </Stack>
-                    <Stack>
-                      <Button onClick={() => handleDelete(contact.email)}>
-                        Delete
-                      </Button>
-                    </Stack>
-                  </Button>
+                      <Stack
+                        direction="row"
+                        width="full"
+                        paddingInline={2}
+                        align="center"
+                      >
+                        <Img
+                          src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Download-Image.png"
+                          width="40px"
+                        />
+                        <Text marginInlineStart={1}>
+                          {contact.lastName + ' ' + contact.name}
+                        </Text>
+                      </Stack>
+                    </Button>
+                    <Button
+                      onClick={() => handleDelete(contact.email)}
+                      _hover={{ bg: 'red.500' }}
+                      width="fit-content"
+                      height="full"
+                    >
+                      <Text>Delete</Text>
+                    </Button>
+                  </Stack>
                 ))}
               </Stack>
             )}

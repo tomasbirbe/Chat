@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import authContext from '../../authContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,9 +6,35 @@ import { Box, Container, Link, Stack, Text } from '@chakra-ui/layout';
 import { Input } from '@chakra-ui/input';
 import { Button } from '@chakra-ui/button';
 
+const getCookie = (cookie: string) => {
+  const cookieName = cookie + '=';
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookies = decodedCookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const c = cookie[i];
+    while (c.charAt(0) === ' ') {
+      c.substring(1);
+    }
+    if (c.indexOf(cookieName) === 0) {
+      return c.substring(cookieName.length, c.length);
+    }
+  }
+};
+
 const Login: React.FC = () => {
   const auth = useContext(authContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookieToken = getCookie('token');
+    console.log(getCookie('token'));
+    console.log(cookieToken);
+    if (cookieToken) {
+      auth.isLogged = true;
+      auth.token = cookieToken;
+      navigate('../Home');
+    }
+  }, []);
 
   const handleLogin = (e: any) => {
     e.preventDefault();
@@ -22,8 +48,12 @@ const Login: React.FC = () => {
       },
     })
       .then(({ data }) => {
+        const now: number = new Date().getTime();
         auth.isLogged = true;
         auth.token = data.token;
+        document.cookie = `token=${data.token}; expires=${new Date(
+          data.expiresIn * 1000 + now
+        ).toUTCString()}; path=/;`;
         navigate('../Home');
       })
       .catch(({ response }) => console.log(response.data));
@@ -88,6 +118,7 @@ const Login: React.FC = () => {
           >
             Login
           </Button>
+          <Button onClick={() => getCookie('token')}>Cookie</Button>
         </Stack>
       </Stack>
     </Container>
